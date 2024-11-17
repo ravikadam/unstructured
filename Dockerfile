@@ -8,7 +8,7 @@ COPY ./requirements requirements/
 COPY unstructured unstructured
 COPY test_unstructured test_unstructured
 COPY example-docs example-docs
-
+COPY *.ipynb .
 RUN chown -R notebook-user:notebook-user /app && \
   apk add font-ubuntu git && \
   fc-cache -fv && \
@@ -24,4 +24,9 @@ RUN find requirements/ -type f -name "*.txt" -exec pip3.11 install --no-cache-di
 ENV PATH="${PATH}:/home/notebook-user/.local/bin"
 ENV TESSDATA_PREFIX=/usr/local/share/tessdata
 
-CMD ["/bin/bash"]
+RUN pip install jupyter
+EXPOSE 8888
+
+#CMD ["/bin/bash"]
+CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+
